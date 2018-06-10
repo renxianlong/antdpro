@@ -12,37 +12,38 @@ export default class GlobalHeader extends PureComponent {
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
   }
-  getNoticeData() {
-    const { notices = [] } = this.props;
-    if (notices.length === 0) {
-      return {};
-    }
-    const newNotices = notices.map(notice => {
-      const newNotice = { ...notice };
-      if (newNotice.datetime) {
-        newNotice.datetime = moment(notice.datetime).fromNow();
-      }
-      // transform id to item key
-      if (newNotice.id) {
-        newNotice.key = newNotice.id;
-      }
-      if (newNotice.extra && newNotice.status) {
-        const color = {
-          todo: '',
-          processing: 'blue',
-          urgent: 'red',
-          doing: 'gold',
-        }[newNotice.status];
-        newNotice.extra = (
-          <Tag color={color} style={{ marginRight: 0 }}>
-            {newNotice.extra}
-          </Tag>
-        );
-      }
-      return newNotice;
-    });
-    return groupBy(newNotices, 'type');
-  }
+  // getNoticeData() {
+  //   const { notices = [] } = this.props;
+  //   if (notices.length === 0) {
+  //     return {};
+  //   }
+  //   const newNotices = notices.map(notice => {
+  //     const newNotice = { ...notice };
+  //     if (newNotice.datetime) {
+  //       newNotice.datetime = moment(notice.datetime).fromNow();
+  //     }
+  //     // transform id to item key
+  //     if (newNotice.id) {
+  //       newNotice.key = newNotice.id;
+  //     }
+  //     if (newNotice.extra && newNotice.status) {
+  //       const color = {
+  //         todo: '',
+  //         processing: 'blue',
+  //         urgent: 'red',
+  //         doing: 'gold',
+  //       }[newNotice.status];
+  //       newNotice.extra = (
+  //         <Tag color={color} style={{ marginRight: 0 }}>
+  //           {newNotice.extra}
+  //         </Tag>
+  //       );
+  //     }
+  //     return newNotice;
+  //   });
+  //   return groupBy(newNotices, 'type');
+  // }
+
   toggle = () => {
     const { collapsed, onCollapse } = this.props;
     onCollapse(!collapsed);
@@ -55,6 +56,7 @@ export default class GlobalHeader extends PureComponent {
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
   }
+
   render() {
     const {
       currentUser = {},
@@ -83,7 +85,8 @@ export default class GlobalHeader extends PureComponent {
         </Menu.Item>
       </Menu>
     );
-    const noticeData = this.getNoticeData();
+    // const noticeData = this.getNoticeData();
+    console.log(this.props);
     return (
       <div className={styles.header}>
         {isMobile && [
@@ -98,7 +101,7 @@ export default class GlobalHeader extends PureComponent {
           onClick={this.toggle}
         />
         <div className={styles.right}>
-          <HeaderSearch
+          {/* <HeaderSearch
             className={`${styles.action} ${styles.search}`}
             placeholder="站内搜索"
             dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
@@ -108,8 +111,8 @@ export default class GlobalHeader extends PureComponent {
             onPressEnter={value => {
               console.log('enter', value); // eslint-disable-line
             }}
-          />
-          <Tooltip title="使用文档">
+          /> */}
+          {/* <Tooltip title="使用文档">
             <a
               target="_blank"
               href="http://pro.ant.design/docs/getting-started"
@@ -148,17 +151,21 @@ export default class GlobalHeader extends PureComponent {
               emptyText="你已完成所有待办"
               emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
             />
-          </NoticeIcon>
-          {currentUser.name ? (
-            <Dropdown overlay={menu}>
-              <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src={currentUser.avatar} />
-                <span className={styles.name}>{currentUser.name}</span>
-              </span>
-            </Dropdown>
-          ) : (
-            <Spin size="small" style={{ marginLeft: 8 }} />
-          )}
+          </NoticeIcon> */}
+          {/* {currentUser.nickname ? ( */}
+          <Dropdown overlay={menu}>
+            <span className={`${styles.action} ${styles.account}`}>
+              <Avatar
+                size="big"
+                className={styles.avatar}
+                src={'http://file.cuanju.com/timg.jpeg'}
+              />
+              <span className={styles.name}>{currentUser.name}</span>
+            </span>
+          </Dropdown>
+          {/* ) : ( */}
+          {/* <Spin size="small" style={{ marginLeft: 8 }} /> */}
+          {/* )} */}
         </div>
       </div>
     );

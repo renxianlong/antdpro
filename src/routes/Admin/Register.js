@@ -274,7 +274,7 @@ export default class Register extends Component {
             >
               注册
             </Button>
-            <Link className={styles.login} to="/user/login">
+            <Link className={styles.login} to="/admin/login">
               使用已有账户登录
             </Link>
           </FormItem>

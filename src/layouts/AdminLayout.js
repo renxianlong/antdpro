@@ -3,7 +3,7 @@ import { Link, Redirect, Switch, Route } from 'dva/router';
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
-import styles from './UserLayout.less';
+import styles from './AdminLayout.less';
 import logo from '../assets/logo.svg';
 import { getRoutes } from '../utils/utils';
 
@@ -65,7 +65,7 @@ class UserLayout extends React.PureComponent {
                   exact={item.exact}
                 />
               ))}
-              <Redirect exact from="/user" to="/user/login" />
+              <Redirect exact from="/admin" to="/admin/login" />
             </Switch>
           </div>
           <GlobalFooter links={links} copyright={copyright} />

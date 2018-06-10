@@ -71,7 +71,7 @@ const proxy = {
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/profile/basic': getProfileBasicData,
   'GET /api/profile/advanced': getProfileAdvancedData,
-  'POST /api/login/account': (req, res) => {
+  'POST /admin/login': (req, res) => {
     const { password, userName, type } = req.body;
     if (password === '888888' && userName === 'admin') {
       res.send({
@@ -137,4 +137,9 @@ const proxy = {
   },
 };
 
-export default (noProxy ? {} : delay(proxy, 1000));
+// export default (noProxy ? {} : delay(proxy, 1000));
+
+export default {
+  'GET /*': 'http://localhost:8080/',
+  'POST /*': 'http://localhost:8080/',
+};

@@ -1,8 +1,8 @@
-import { UserDetail, UserSearch, UserUpdate } from '../services/api';
+import { JuSearch, JuDetail } from '../services/api';
 import { routerRedux } from 'dva/router';
 
 export default {
-  namespace: 'user',
+  namespace: 'ju',
   state: {
     data: {
       list: [],
@@ -11,29 +11,29 @@ export default {
   },
 
   effects: {
-    *detail({ payload }, { call, put }) {
-      const response = yield call(UserDetail, payload);
-      yield put(
-        routerRedux.push({
-          pathname: '/user-management/detail',
-          state: {
-            data: response.d,
-          },
-        })
-      );
-    },
     *search({ payload }, { call, put }) {
-      const response = yield call(UserSearch, payload);
+      //设置默认的page和limit
+      if (payload === undefined) {
+        payload = {
+          p: 1,
+          l: 10,
+        };
+      } else {
+        if (!('p' in payload)) {
+          payload = { ...payload, p: 1 };
+        }
+        if (!('l' in payload)) {
+          payload = { ...payload, l: 10 };
+        }
+      }
+
+      const response = yield call(JuSearch, payload);
       yield put({
         type: 'saveSearch',
         payload: response,
       });
     },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(UserUpdate, payload);
-    },
   },
-
   reducers: {
     saveSearch(state, action) {
       return {

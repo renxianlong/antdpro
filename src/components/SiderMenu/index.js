@@ -13,6 +13,7 @@ const SiderMenuWrapper = props =>
       onMaskClick={() => {
         props.onCollapse(true);
       }}
+      y
       width="256px"
     >
       <SiderMenu {...props} collapsed={props.isMobile ? false : props.collapsed} />

@@ -1,8 +1,9 @@
-import { UserDetail, UserSearch, UserUpdate } from '../services/api';
+import { PermissionSearch, PermissionAdd } from '../services/api';
 import { routerRedux } from 'dva/router';
 
 export default {
-  namespace: 'user',
+  namespace: 'permission',
+
   state: {
     data: {
       list: [],
@@ -11,26 +12,16 @@ export default {
   },
 
   effects: {
-    *detail({ payload }, { call, put }) {
-      const response = yield call(UserDetail, payload);
-      yield put(
-        routerRedux.push({
-          pathname: '/user-management/detail',
-          state: {
-            data: response.d,
-          },
-        })
-      );
-    },
     *search({ payload }, { call, put }) {
-      const response = yield call(UserSearch, payload);
+      const request = { orderBy: 'id', ...payload };
+      const response = yield call(PermissionSearch, request);
       yield put({
         type: 'saveSearch',
         payload: response,
       });
     },
-    *update({ payload, callback }, { call, put }) {
-      const response = yield call(UserUpdate, payload);
+    *add({ payload, callback }, { call, put }) {
+      const response = yield call(PermissionAdd, payload);
     },
   },
 

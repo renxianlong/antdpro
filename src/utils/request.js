@@ -20,6 +20,8 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
+//校验Http状态码
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -29,10 +31,29 @@ function checkStatus(response) {
     message: `请求错误 ${response.status}: ${response.url}`,
     description: errortext,
   });
+
   const error = new Error(errortext);
   error.name = response.status;
   error.response = response;
   throw error;
+}
+
+//校验业务状态码
+function checkCode(response) {
+  return response.json().then(json => {
+    console.log(json);
+    const { c, m } = json;
+    if (c != 0) {
+      notification.error({
+        message: `请求失败`,
+        description: m,
+      });
+
+      return false;
+    }
+
+    return json;
+  });
 }
 
 /**
@@ -51,7 +72,7 @@ export default function request(url, options) {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
         Accept: 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json;charset=UTF-8',
         ...newOptions.headers,
       };
       newOptions.body = JSON.stringify(newOptions.body);
@@ -66,12 +87,7 @@ export default function request(url, options) {
 
   return fetch(url, newOptions)
     .then(checkStatus)
-    .then(response => {
-      if (newOptions.method === 'DELETE' || response.status === 204) {
-        return response.text();
-      }
-      return response.json();
-    })
+    .then(checkCode)
     .catch(e => {
       const { dispatch } = store;
       const status = e.name;
